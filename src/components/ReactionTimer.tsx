@@ -2,14 +2,15 @@
 import React from 'react';
 import { useReaction } from '@/contexts/ReactionContext';
 import { Button } from '@/components/ui/button';
+import { RefreshCcw } from 'lucide-react';
 
 const ReactionTimer: React.FC = () => {
   const { currentState, startTest, recordReaction, lastReactionTime } = useReaction();
 
   const handleScreenTap = () => {
-    if (currentState === 'waiting') {
+    if (currentState === 'waiting' && lastReactionTime === null) {
       startTest();
-    } else {
+    } else if (currentState !== 'waiting') {
       recordReaction();
     }
   };
@@ -28,9 +29,10 @@ const ReactionTimer: React.FC = () => {
   const getInstructions = () => {
     switch (currentState) {
       case 'waiting':
-        return lastReactionTime !== null 
-          ? `Your reaction time: ${lastReactionTime}ms\nTap to start again`
-          : 'Tap to start';
+        if (lastReactionTime !== null) {
+          return `${lastReactionTime}ms`;
+        }
+        return 'Tap to start';
       case 'ready':
         return 'Wait for green...';
       case 'reacting':
@@ -49,6 +51,20 @@ const ReactionTimer: React.FC = () => {
         <p className="text-xl font-bold whitespace-pre-line">
           {getInstructions()}
         </p>
+        
+        {lastReactionTime !== null && currentState === 'waiting' && (
+          <Button 
+            onClick={(e) => {
+              e.stopPropagation();
+              startTest();
+            }} 
+            className="mt-4 bg-white/20 hover:bg-white/30 text-white"
+            size="sm"
+          >
+            <RefreshCcw className="mr-2 h-4 w-4" />
+            Restart
+          </Button>
+        )}
       </div>
     </div>
   );
