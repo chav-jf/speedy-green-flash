@@ -18,6 +18,7 @@ interface ReactionContextType {
   bestReactionTime: number | null;
   isConnected: boolean;
   connectionStatus: string;
+  socket: Socket | null;
 }
 
 const ReactionContext = createContext<ReactionContextType | undefined>(undefined);
@@ -151,6 +152,7 @@ export const ReactionProvider: React.FC<{ children: ReactNode }> = ({ children }
         bestReactionTime,
         isConnected,
         connectionStatus,
+        socket,
       }}
     >
       {children}
