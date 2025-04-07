@@ -48,7 +48,7 @@ const ReactionTimer: React.FC = () => {
       onClick={handleScreenTap}
     >
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-center">
-        <p className="text-xl font-bold whitespace-pre-line">
+        <p className={`font-bold whitespace-pre-line ${lastReactionTime !== null && currentState === 'waiting' ? 'text-5xl' : 'text-xl'}`}>
           {getInstructions()}
         </p>
         
