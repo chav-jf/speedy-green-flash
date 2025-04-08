@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { RefreshCcw } from 'lucide-react';
 
 const ReactionTimer: React.FC = () => {
-  const { currentState, startTest, recordReaction, lastReactionTime } = useReaction();
+  const { currentState, startTest, recordReaction, lastReactionTime, resetTest } = useReaction();
 
   const handleScreenTap = () => {
     if (currentState === 'waiting' && lastReactionTime === null) {
@@ -56,7 +56,7 @@ const ReactionTimer: React.FC = () => {
           <Button 
             onClick={(e) => {
               e.stopPropagation();
-              startTest();
+              resetTest(); // Changed from startTest() to resetTest() to return to initial state
             }} 
             className="mt-4 bg-white/20 hover:bg-white/30 text-white"
             size="sm"
