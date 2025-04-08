@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { toast } from 'sonner';
@@ -25,21 +24,8 @@ interface ReactionContextType {
 
 const ReactionContext = createContext<ReactionContextType | undefined>(undefined);
 
-// Get WebSocket URL from environment or fallback to safe defaults
-const getSocketServerUrl = () => {
-  // If we're running on a custom domain, use that domain with the WebSocket port
-  const currentDomain = window.location.hostname;
-  
-  if (currentDomain === 'localhost') {
-    return 'http://localhost:3000';
-  } else {
-    // For production deployment - use the same domain but on port 3000
-    return `https://${currentDomain}:3000`;
-  }
-};
-
-// Initialize with the dynamically determined URL
-const SOCKET_SERVER_URL = getSocketServerUrl();
+// Define the WebSocket server URL using your domain
+const SOCKET_SERVER_URL = 'http://tesisdrt.myftp.org:3000';
 
 export const ReactionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currentState, setCurrentState] = useState<'waiting' | 'ready' | 'reacting'>('waiting');
