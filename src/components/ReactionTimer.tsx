@@ -2,7 +2,7 @@
 import React from 'react';
 import { useReaction } from '@/contexts/ReactionContext';
 import { Button } from '@/components/ui/button';
-import { RefreshCcw, Wifi, WifiOff } from 'lucide-react';
+import { RefreshCcw, Wifi, WifiOff, CloudOff, Cloud } from 'lucide-react';
 
 const ReactionTimer: React.FC = () => {
   const { 
@@ -11,7 +11,9 @@ const ReactionTimer: React.FC = () => {
     recordReaction, 
     lastReactionTime,
     isConnected,
-    connectionStatus
+    connectionStatus,
+    offlineMode,
+    toggleOfflineMode
   } = useReaction();
 
   const handleScreenTap = () => {
@@ -56,13 +58,29 @@ const ReactionTimer: React.FC = () => {
     >
       {/* Connection status indicator */}
       <div className="absolute top-4 right-4 flex items-center gap-2 text-white/70 bg-black/20 p-2 rounded-full">
-        {isConnected ? 
-          <Wifi className="h-4 w-4" /> : 
-          <WifiOff className="h-4 w-4" />
+        {offlineMode ? 
+          <CloudOff className="h-4 w-4" /> : 
+          (isConnected ? <Wifi className="h-4 w-4" /> : <WifiOff className="h-4 w-4" />)
         }
         <span className="text-xs">{connectionStatus}</span>
       </div>
       
+      {/* Offline mode toggle */}
+      <Button
+        size="sm"
+        variant="ghost" 
+        className="absolute top-4 left-16 flex items-center gap-1 text-white/70 bg-black/20 p-2 hover:bg-black/30"
+        onClick={(e) => {
+          e.stopPropagation();
+          toggleOfflineMode();
+        }}
+      >
+        {offlineMode ? 
+          <><Cloud className="h-4 w-4" /> <span className="text-xs">Go Online</span></> : 
+          <><CloudOff className="h-4 w-4" /> <span className="text-xs">Go Offline</span></>
+        }
+      </Button>
+
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-center">
         <p className={`font-bold whitespace-pre-line ${lastReactionTime !== null && currentState === 'waiting' ? 'text-5xl' : 'text-xl'}`}>
           {getInstructions()}
