@@ -2,17 +2,10 @@
 import React from 'react';
 import { useReaction } from '@/contexts/ReactionContext';
 import { Button } from '@/components/ui/button';
-import { RefreshCcw, Wifi, WifiOff } from 'lucide-react';
+import { RefreshCcw } from 'lucide-react';
 
 const ReactionTimer: React.FC = () => {
-  const { 
-    currentState, 
-    startTest, 
-    recordReaction, 
-    lastReactionTime,
-    isConnected,
-    connectionStatus
-  } = useReaction();
+  const { currentState, startTest, recordReaction, lastReactionTime } = useReaction();
 
   const handleScreenTap = () => {
     if (currentState === 'waiting' && lastReactionTime === null) {
@@ -54,15 +47,6 @@ const ReactionTimer: React.FC = () => {
       className={`w-full h-full flex flex-col items-center justify-center ${getBackgroundColor()} transition-colors duration-100`}
       onClick={handleScreenTap}
     >
-      {/* Connection status indicator */}
-      <div className="absolute top-4 right-4 flex items-center gap-2 text-white/70 bg-black/20 p-2 rounded-full">
-        {isConnected ? 
-          <Wifi className="h-4 w-4" /> : 
-          <WifiOff className="h-4 w-4" />
-        }
-        <span className="text-xs">{connectionStatus}</span>
-      </div>
-      
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-center">
         <p className={`font-bold whitespace-pre-line ${lastReactionTime !== null && currentState === 'waiting' ? 'text-5xl' : 'text-xl'}`}>
           {getInstructions()}
