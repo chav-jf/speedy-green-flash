@@ -2,22 +2,25 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useReaction } from '@/contexts/ReactionContext';
-import { Socket } from 'socket.io-client';
-import { Zap, WifiOff, Wifi } from 'lucide-react';
+import { Zap, WifiOff, Wifi, RefreshCw } from 'lucide-react';
+import { toast } from 'sonner';
 
 const TriggerDevice: React.FC = () => {
-  const { isConnected, connectionStatus, socket } = useReaction();
+  const { isConnected, connectionStatus, socket, reconnectSocket } = useReaction();
   const [isSending, setIsSending] = useState(false);
 
   const handleTrigger = () => {
     if (socket && isConnected) {
       setIsSending(true);
       socket.emit('triggerGreenLight');
+      toast.success("Green light triggered!");
       
       // Reset the sending state after a short delay
       setTimeout(() => {
         setIsSending(false);
       }, 500);
+    } else {
+      toast.error("Not connected to server. Cannot trigger green light.");
     }
   };
 
@@ -31,6 +34,19 @@ const TriggerDevice: React.FC = () => {
         }
         <span className="text-xs">{connectionStatus}</span>
       </div>
+      
+      {/* Reconnect button */}
+      <Button 
+        size="sm"
+        onClick={() => {
+          reconnectSocket();
+          toast.info("Attempting to reconnect...");
+        }}
+        className="absolute top-4 left-4 flex items-center gap-1 bg-black/20 hover:bg-black/30"
+      >
+        <RefreshCw className="h-4 w-4" />
+        <span className="text-xs">Reconnect</span>
+      </Button>
       
       <h1 className="text-2xl font-bold mb-6 text-white">Reaction Timer Trigger</h1>
       
@@ -52,7 +68,7 @@ const TriggerDevice: React.FC = () => {
         Press the button to trigger the color change in the reaction timer.
         {!isConnected && (
           <span className="block mt-2 text-red-400">
-            Not connected to the server. Please check your connection.
+            Not connected to the server. Please check your connection or click the Reconnect button.
           </span>
         )}
       </p>

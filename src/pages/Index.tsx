@@ -3,9 +3,31 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ReactionTimer from '@/components/ReactionTimer';
 import Results from '@/components/Results';
-import { ReactionProvider } from '@/contexts/ReactionContext';
+import { ReactionProvider, useReaction } from '@/contexts/ReactionContext';
 import { Button } from '@/components/ui/button';
-import { ChevronUp, ChevronDown, ExternalLink } from 'lucide-react';
+import { ChevronUp, ChevronDown, ExternalLink, RefreshCw } from 'lucide-react';
+import { toast } from 'sonner';
+
+const ConnectionControls = () => {
+  const { isConnected, connectionStatus, reconnectSocket } = useReaction();
+  
+  return (
+    <div className="absolute top-16 left-4 flex flex-col gap-2">
+      <Button 
+        onClick={() => {
+          reconnectSocket();
+          toast.info("Attempting to reconnect...");
+        }}
+        size="sm"
+        variant={isConnected ? "outline" : "default"}
+        className="flex items-center gap-1 bg-black/20 hover:bg-black/30"
+      >
+        <RefreshCw className="h-4 w-4" />
+        <span className="text-xs">Reconnect</span>
+      </Button>
+    </div>
+  );
+};
 
 const Index = () => {
   const [showResults, setShowResults] = useState(false);
@@ -23,6 +45,9 @@ const Index = () => {
           <ExternalLink className="h-4 w-4" />
           <span className="text-xs">Trigger Device</span>
         </Link>
+        
+        {/* Connection controls */}
+        <ConnectionControls />
         
         {/* Results drawer */}
         <div 
