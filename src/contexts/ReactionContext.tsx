@@ -53,16 +53,19 @@ export const ReactionProvider: React.FC<{ children: ReactNode }> = ({ children }
     // Clear any existing timers
     if (changeTimer) clearTimeout(changeTimer);
     
-    setCurrentState('ready');
-    // Random delay between 3000ms (3s) and 5000ms (5s)
-    const delay = Math.random() * 2000 + 3000;
-    
-    const timer = setTimeout(() => {
-      setCurrentState('reacting');
-      setStartTime(Date.now());
-    }, delay);
-    
-    setChangeTimer(timer);
+    // Add 1 second delay before changing to 'ready' state
+    setTimeout(() => {
+      setCurrentState('ready');
+      // Random delay between 3000ms (3s) and 5000ms (5s)
+      const delay = Math.random() * 2000 + 3000;
+      
+      const timer = setTimeout(() => {
+        setCurrentState('reacting');
+        setStartTime(Date.now());
+      }, delay);
+      
+      setChangeTimer(timer);
+    }, 1000); // 1 second delay
   };
 
   const recordReaction = () => {
