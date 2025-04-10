@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 export interface ReactionResult {
@@ -53,19 +52,18 @@ export const ReactionProvider: React.FC<{ children: ReactNode }> = ({ children }
     // Clear any existing timers
     if (changeTimer) clearTimeout(changeTimer);
     
-    // Add 1 second delay before changing to 'ready' state
+    // Add 1 second delay before changing directly to 'reacting' state
     setTimeout(() => {
       setCurrentState('ready');
-      // Random delay between 3000ms (3s) and 5000ms (5s)
-      const delay = Math.random() * 2000 + 3000;
       
+      // Changed from random 3-5 seconds to fixed 1 second delay
       const timer = setTimeout(() => {
         setCurrentState('reacting');
         setStartTime(Date.now());
-      }, delay);
+      }, 1000); // Fixed 1 second delay
       
       setChangeTimer(timer);
-    }, 1000); // 1 second delay
+    }, 1000); // 1 second delay before ready state
   };
 
   const recordReaction = () => {
