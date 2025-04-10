@@ -52,18 +52,16 @@ export const ReactionProvider: React.FC<{ children: ReactNode }> = ({ children }
     // Clear any existing timers
     if (changeTimer) clearTimeout(changeTimer);
     
-    // Add 1 second delay before changing directly to 'reacting' state
-    setTimeout(() => {
-      setCurrentState('ready');
+    // Immediately change to 'ready' state without the first 1-second delay
+    setCurrentState('ready');
       
-      // Changed from random 3-5 seconds to fixed 1 second delay
-      const timer = setTimeout(() => {
-        setCurrentState('reacting');
-        setStartTime(Date.now());
-      }, 1000); // Fixed 1 second delay
+    // Keep the fixed 1 second delay before showing green
+    const timer = setTimeout(() => {
+      setCurrentState('reacting');
+      setStartTime(Date.now());
+    }, 1000); // Fixed 1 second delay
       
-      setChangeTimer(timer);
-    }, 1000); // 1 second delay before ready state
+    setChangeTimer(timer);
   };
 
   const recordReaction = () => {
